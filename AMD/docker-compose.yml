@@ -53,6 +53,28 @@ services:
     ports:
       - 1883:1883
 
+ influxdb:
+    image: influxdb:1.8
+    ports:
+      - '8086:8086'
+    volumes:
+      - influxdb_data:/var/lib/influxdb
+    environment:
+      - INFLUXDB_DB=application 
+      - INFLUXDB_ADMIN_USER=root 
+      - INFLUXDB_ADMIN_PASSWORD=root 
+      - INFLUXDB_HTTP_AUTH_ENABLED=true  
+    restart: always
+
+  grafana:
+    image: grafana/grafana
+    network_mode: host
+    restart: always
+    ports:
+      - "3000:3000"
+    restart: always
+
 volumes:
   postgresqldata:
   redisdata:
+  influxdb_data:
