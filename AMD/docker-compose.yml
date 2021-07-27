@@ -9,9 +9,6 @@ services:
       - NETWORK_SERVER__BAND__NAME=US915
       - NETWORK_SERVER__GATEWAY__BACKEND__MQTT__SERVER=tcp://mosquitto:1883
       - JOIN_SERVER__DEFAULT__SERVER=http://chirpstack-application-server:8003
-    depends_on:
-      - postgresql
-      - mosquitto
     restart: always
 
   chirpstack-application-server:
@@ -24,8 +21,6 @@ services:
       - APPLICATION_SERVER__INTEGRATION__MQTT__SERVER=tcp://mosquitto:1883
       - APPLICATION_SERVER__API__PUBLIC_HOST=chirpstack-application-server:8001
       - APPLICATION_SERVER__EXTERNAL_API__JWT_SECRET=verysecret
-    depends_on:
-      - chirpstack-network-server
     restart: always
 
   chirpstack-gateway-bridge:
@@ -34,8 +29,6 @@ services:
       - 1700:1700/udp
     environment:
       - INTEGRATION__MQTT__AUTH__GENERIC__SERVERS=tcp://mosquitto:1883
-    depends_on: 
-      - mosquitto
     restart: always
 
   postgresql:
