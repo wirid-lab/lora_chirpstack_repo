@@ -12,6 +12,7 @@ services:
     depends_on:
       - postgresql
       - mosquitto
+    restart: always
 
   chirpstack-application-server:
     image: wiridlab/chirpstack-application-server:3amd
@@ -25,6 +26,7 @@ services:
       - APPLICATION_SERVER__EXTERNAL_API__JWT_SECRET=verysecret
     depends_on:
       - chirpstack-network-server
+    restart: always
 
   chirpstack-gateway-bridge:
     image: wiridlab/chirpstack-gateway-bridge:3amd
@@ -34,6 +36,7 @@ services:
       - INTEGRATION__MQTT__AUTH__GENERIC__SERVERS=tcp://mosquitto:1883
     depends_on: 
       - mosquitto
+    restart: always
 
   postgresql:
     image: postgres:9.6-alpine
@@ -42,16 +45,19 @@ services:
     volumes:
       - ./configuration/postgresql/initdb:/docker-entrypoint-initdb.d
       - ./postgresqldata:/var/lib/postgresql/data
+    restart: always
 
   redis:
     image: redis:5-alpine
     volumes:
       - ./redisdata:/data
+    restart: always  
 
   mosquitto:
     image: eclipse-mosquitto:1.6
     ports:
       - 1883:1883
+    restart: always      
 
  influxdb:
     image: influxdb:1.8
@@ -69,7 +75,6 @@ services:
   grafana:
     image: grafana/grafana
     network_mode: host
-    restart: always
     ports:
       - "3000:3000"
     restart: always
